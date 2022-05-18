@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Scopes\ActiveUsersScope;
+use App\Models\Scopes\UsersWithCourseScope;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -59,5 +60,19 @@ class User extends Authenticatable
     protected static function booted()
     {
         static::addGlobalScope(new ActiveUsersScope);
+        static::addGlobalScope(new UsersWithCourseScope);
+    }
+
+    public function scopeAmericans($query) {
+        return $query->whereLocation('America');
+    }
+
+    public function scopeOfSex($query, $sex)
+    {
+        return $query->whereSex($sex);
+    }
+
+    public function courses() {
+        return $this->hasMany(Course::class);
     }
 }

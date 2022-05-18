@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUserModelRequest;
 use App\Http\Requests\UpdateUserModelRequest;
-use App\Models\UserModel;
+use App\Models\User;
 
 class UserModelController extends Controller
 {
@@ -15,7 +15,10 @@ class UserModelController extends Controller
      */
     public function index()
     {
-        //
+        //retrieve all users starting with the most recent, ordered by Id
+        return User::latest('id')->get();
+        //uncomment this to use paginatation
+        //return User::latest('id')->paginate(50);
     }
 
     /**
