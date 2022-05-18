@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\ActiveUsersScope;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -11,7 +12,7 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
-
+    const DEFAULT_STATUS = 'active';
     /**
      * The attributes that are mass assignable.
      *
@@ -21,6 +22,19 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'age',
+        'sex',
+        'location',
+        'status',
+        'relationship_status',
+    ];
+
+    /**
+     * Default value for some model fields
+     * 
+     */
+    protected $attributes = [
+        'status' => self::DEFAULT_STATUS,
     ];
 
     /**
@@ -41,4 +55,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    protected static function booted()
+    {
+        static::addGlobalScope(new ActiveUsersScope);
+    }
 }
